@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 
@@ -57,10 +59,30 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
+  <script>
+    function playSound(e) {
+      const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`)
+      const key = document.querySelector(`.key[data-key="${event.keyCode}"]`)
 
-</script>
+      if (!audio) return; // Stop the function from running altogether.
+      audio.currentTime = 0; // Rewind to the start. 
+      audio.play(); // If you call play on an audio element that's already playing, it won't play. 
+      key.classList.add('playing');
+    }
+
+    function removeTransition(e) {
+      if (e.propertyName !== 'transform') return; // skip it if it's not a transform
+      console.log(this);
+      this.classList.remove('playing');
+    }
+
+    const keys = document.querySelectorAll('.key'); // Gives us an array of all of the keys. 
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition)) // You have to use forEach because if you have a list of elements, you cannot listen to all of their events.
+    window.addEventListener('keydown', playSound);
+
+  </script>
 
 
 </body>
+
 </html>
